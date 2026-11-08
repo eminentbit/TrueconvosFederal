@@ -37,14 +37,15 @@ export function Field({ label, children, className }: FieldProps) {
 }
 
 /**
- * Formspree honeypot. Hidden from people and assistive tech; bots that fill
- * it in are discarded server-side.
+ * Web3Forms honeypot (`botcheck`). Hidden from people and assistive tech; an
+ * unchecked checkbox is never submitted, so only bots that tick it send it,
+ * and Web3Forms discards those submissions.
  */
 export function Honeypot() {
   return (
     <input
-      type="text"
-      name="_gotcha"
+      type="checkbox"
+      name="botcheck"
       tabIndex={-1}
       autoComplete="off"
       aria-hidden="true"

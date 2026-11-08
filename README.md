@@ -9,7 +9,7 @@ TypeScript 7 · Vitest · oxlint · Prettier
 The page is **prerendered at build time**: `dist/index.html` ships the full
 HTML, which React then hydrates. Crawlers, link previews and visitors without
 JavaScript get the complete page, and both forms still POST natively to
-Formspree without JS.
+Web3Forms without JS.
 
 ## Getting started
 
@@ -17,7 +17,7 @@ Requires Node 22.18+ (Node 24 recommended; see `.nvmrc`).
 
 ```bash
 npm install
-cp .env.example .env.local   # add your Formspree form IDs
+cp .env.example .env.local   # add your Web3Forms access keys
 npm run dev                  # http://localhost:5173
 ```
 
@@ -35,15 +35,27 @@ npm run dev                  # http://localhost:5173
 
 ## Environment variables
 
-| Variable                            | Used by                      |
-| ----------------------------------- | ---------------------------- |
-| `VITE_FORMSPREE_CONTACT_FORM_ID`    | "Let's talk teaming" form    |
-| `VITE_FORMSPREE_NEWSLETTER_FORM_ID` | "Get teaming updates" signup |
+| Variable                               | Web3Forms form                      | Used by                      |
+| -------------------------------------- | ----------------------------------- | ---------------------------- |
+| `VITE_WEB3FORMS_CONTACT_ACCESS_KEY`    | "TrueConvos Federal — Contact"      | "Let's talk teaming" form    |
+| `VITE_WEB3FORMS_NEWSLETTER_ACCESS_KEY` | "TrueConvos Federal — Mailing list" | "Get teaming updates" signup |
 
-These are compiled into the bundle (they are public Formspree IDs, not
-secrets). If one is missing, the build prints a warning and that form shows an
-"unavailable" message rather than failing silently. In CI, set them as GitHub
-repository **variables**.
+Web3Forms access keys are public by design (they ship in the page's HTML),
+so these are not secrets. If one is missing, the build prints a warning and
+that form shows an "unavailable" message rather than failing silently. In CI,
+set them as GitHub repository **variables**.
+
+### Forms (Web3Forms)
+
+Both forms post to `https://api.web3forms.com/submit`. The access key picks
+the form. Subject lines, recipient and redirect URL are set **per form in the
+Web3Forms dashboard**, not in code.
+
+- Field `name`s in the contact form ("Name", "Organization", "How can we
+  help?") are the labels in the notification email.
+- `email` must stay **lowercase**: Web3Forms uses it as the Reply-To address.
+- Spam: a hidden `botcheck` honeypot plus Web3Forms' server-side filtering.
+- Free plan: 250 submissions/month across all forms.
 
 ## Project structure
 
@@ -60,8 +72,8 @@ repository **variables**.
 │   ├── config/              # site.ts (company facts), env.ts (typed env)
 │   ├── content/             # Typed page copy/data (capabilities, personnel…)
 │   ├── features/            # Self-contained features (contact, newsletter)
-│   ├── hooks/               # Reusable hooks (useFormspree)
-│   ├── lib/                 # Framework-agnostic helpers (cn, formspree client)
+│   ├── hooks/               # Reusable hooks (useWeb3Forms)
+│   ├── lib/                 # Framework-agnostic helpers (cn, Web3Forms client)
 │   ├── sections/            # One component per page section
 │   ├── styles/globals.css   # Tailwind entry + design tokens (@theme)
 │   ├── test/setup.ts        # Vitest + Testing Library setup
@@ -104,14 +116,19 @@ host settings:
 - `index.html`: `Cache-Control: no-cache`
 - Security headers: `Strict-Transport-Security`,
   `X-Content-Type-Options: nosniff`, `Referrer-Policy`, and a CSP that allows
-  `form-action` / `connect-src` to `https://formspree.io`
+  `form-action` / `connect-src` to `https://api.web3forms.com`
 
 ## Before launch
 
 - [ ] Add `public/TrueConvos-Federal-Capability-Statement.pdf` (both download
       links point to it)
-- [ ] Set both Formspree form IDs (locally in `.env.local`, in CI and on the
-      host)
+- [ ] Set both Web3Forms access keys in CI (repository variables) and on the
+      host (`.env.local` already has them for local testing)
+- [ ] In Web3Forms, for **each** form: verify `bd@trueconvos.com` (link in that
+      inbox), then switch the recipient from the Gmail test inbox to it
+      (Settings → Email Configuration)
+- [ ] In Web3Forms, change each form's Website URL from `localhost` to the real
+      domain, and set a Redirect URL (used only by no-JS submissions)
 - [ ] Replace the `[Name]` / `[Title]` placeholders in
       `src/content/personnel.ts`
 - [ ] Delete `legacy/` once you no longer need the original for comparison

@@ -8,8 +8,8 @@ import { defineConfig, loadEnv } from "vite";
 
 /** Variables the production bundle needs for the contact + newsletter forms. */
 const PRODUCTION_ENV_KEYS = [
-  "VITE_FORMSPREE_CONTACT_FORM_ID",
-  "VITE_FORMSPREE_NEWSLETTER_FORM_ID",
+  "VITE_WEB3FORMS_CONTACT_ACCESS_KEY",
+  "VITE_WEB3FORMS_NEWSLETTER_ACCESS_KEY",
 ] as const;
 
 // https://vite.dev/config/

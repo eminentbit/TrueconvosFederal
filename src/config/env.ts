@@ -1,12 +1,12 @@
-import { getFormspreeEndpoint } from "@/lib/formspree";
+import { readAccessKey } from "@/lib/web3forms";
 
 /**
- * Typed, validated access to build-time environment variables.
+ * Typed access to build-time environment variables.
  * Declarations live in src/env.d.ts; values come from .env* files or CI.
  */
-export const formEndpoints = {
-  contact: getFormspreeEndpoint(import.meta.env.VITE_FORMSPREE_CONTACT_FORM_ID),
-  newsletter: getFormspreeEndpoint(
-    import.meta.env.VITE_FORMSPREE_NEWSLETTER_FORM_ID,
+export const formAccessKeys = {
+  contact: readAccessKey(import.meta.env.VITE_WEB3FORMS_CONTACT_ACCESS_KEY),
+  newsletter: readAccessKey(
+    import.meta.env.VITE_WEB3FORMS_NEWSLETTER_ACCESS_KEY,
   ),
 } as const;

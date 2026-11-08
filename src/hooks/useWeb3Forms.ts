@@ -1,6 +1,6 @@
 import { startTransition, useActionState, type FormEvent } from "react";
 
-import { SUBMISSION_ERRORS, submitToFormspree } from "@/lib/formspree";
+import { SUBMISSION_ERRORS, submitToWeb3Forms } from "@/lib/web3forms";
 
 export type FormStatus = "idle" | "pending" | "success" | "error";
 
@@ -11,9 +11,9 @@ type SubmissionState = {
 
 type Submission = { form: HTMLFormElement; data: FormData };
 
-interface UseFormspreeOptions {
-  /** Formspree endpoint; when `undefined` the form reports it is unavailable. */
-  endpoint: string | undefined;
+interface UseWeb3FormsOptions {
+  /** Web3Forms access key; when `undefined` the form reports it is unavailable. */
+  accessKey: string | undefined;
   messages: { pending: string; success: string };
 }
 
@@ -25,25 +25,26 @@ export const FORM_UNAVAILABLE_MESSAGE =
 /**
  * Progressive-enhancement form handler built on React 19 Actions.
  *
- * The <form> keeps its native `action`/`method`, so the prerendered page still
- * works without JavaScript. Once hydrated, `handleSubmit` intercepts the submit
- * and posts via fetch so visitors stay on the page.
+ * The <form> keeps its native `action`/`method` (plus a hidden `access_key`),
+ * so the prerendered page still works without JavaScript. Once hydrated,
+ * `handleSubmit` intercepts the submit and posts via fetch so visitors stay
+ * on the page.
  *
  * We dispatch from `onSubmit` rather than passing a function to `<form action>`
  * because React auto-resets forms after function actions — which would wipe
  * the visitor's input on a failed submit. Here fields reset only on success.
  */
-export function useFormspree({ endpoint, messages }: UseFormspreeOptions) {
+export function useWeb3Forms({ accessKey, messages }: UseWeb3FormsOptions) {
   const [state, dispatch, isPending] = useActionState<
     SubmissionState,
     Submission
   >(async (_previous, { form, data }) => {
-    if (!endpoint) {
+    if (!accessKey) {
       return { status: "error", message: FORM_UNAVAILABLE_MESSAGE };
     }
 
     try {
-      const result = await submitToFormspree(endpoint, data);
+      const result = await submitToWeb3Forms(accessKey, data);
       if (!result.ok) return { status: "error", message: result.message };
     } catch {
       // A throw inside an Action propagates to the nearest error boundary and

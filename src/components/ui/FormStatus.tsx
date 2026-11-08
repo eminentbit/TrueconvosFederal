@@ -1,4 +1,4 @@
-import type { FormStatus as Status } from "@/hooks/useFormspree";
+import type { FormStatus as Status } from "@/hooks/useWeb3Forms";
 import { cn } from "@/lib/cn";
 
 interface FormStatusProps {

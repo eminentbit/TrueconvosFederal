@@ -6,25 +6,32 @@ import {
   Input,
   Textarea,
 } from "@/components/ui";
-import { formEndpoints } from "@/config/env";
-import { useFormspree } from "@/hooks/useFormspree";
+import { formAccessKeys } from "@/config/env";
+import { useWeb3Forms } from "@/hooks/useWeb3Forms";
 import { cn } from "@/lib/cn";
+import { WEB3FORMS_ENDPOINT } from "@/lib/web3forms";
 
 interface ContactFormProps {
-  /** Override for tests/previews; defaults to the configured Formspree form. */
-  endpoint?: string | undefined;
+  /** Web3Forms access key override (tests/previews); defaults to env config. */
+  formKey?: string | undefined;
   /** id of the visible heading that names this form. */
   labelledBy?: string;
   className?: string;
 }
 
+/**
+ * Teaming/contact inquiry. Field `name`s double as the labels in the
+ * notification email, so they're human-readable. `email` must stay lowercase:
+ * Web3Forms uses it as the Reply-To address. Subject line and recipient are
+ * configured on the "TrueConvos Federal — Contact" form in Web3Forms.
+ */
 export function ContactForm({
-  endpoint = formEndpoints.contact,
+  formKey = formAccessKeys.contact,
   labelledBy,
   className,
 }: ContactFormProps) {
-  const { status, message, isPending, handleSubmit } = useFormspree({
-    endpoint,
+  const { status, message, isPending, handleSubmit } = useWeb3Forms({
+    accessKey: formKey,
     messages: {
       pending: "Sending…",
       success: "Thanks — we'll be in touch shortly.",
@@ -33,7 +40,7 @@ export function ContactForm({
 
   return (
     <form
-      action={endpoint}
+      action={WEB3FORMS_ENDPOINT}
       method="POST"
       aria-labelledby={labelledBy}
       onSubmit={handleSubmit}
@@ -42,24 +49,22 @@ export function ContactForm({
         className,
       )}
     >
-      <input
-        type="hidden"
-        name="_subject"
-        value="Website inquiry — TrueConvos Federal"
-      />
+      {formKey ? (
+        <input type="hidden" name="access_key" value={formKey} />
+      ) : null}
       <Honeypot />
 
       <Field label="Name">
-        <Input type="text" name="name" autoComplete="name" />
+        <Input type="text" name="Name" autoComplete="name" />
       </Field>
       <Field label="Organization">
-        <Input type="text" name="org" autoComplete="organization" />
+        <Input type="text" name="Organization" autoComplete="organization" />
       </Field>
       <Field label="Email">
         <Input type="email" name="email" required autoComplete="email" />
       </Field>
       <Field label="How can we help?">
-        <Textarea name="message" rows={4} />
+        <Textarea name="How can we help?" rows={4} />
       </Field>
 
       <Button type="submit" disabled={isPending} className="self-start">

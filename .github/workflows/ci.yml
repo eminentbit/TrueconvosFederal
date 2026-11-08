@@ -32,8 +32,8 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_FORMSPREE_CONTACT_FORM_ID: ${{ vars.VITE_FORMSPREE_CONTACT_FORM_ID }}
-          VITE_FORMSPREE_NEWSLETTER_FORM_ID: ${{ vars.VITE_FORMSPREE_NEWSLETTER_FORM_ID }}
+          VITE_WEB3FORMS_CONTACT_ACCESS_KEY: ${{ vars.VITE_WEB3FORMS_CONTACT_ACCESS_KEY }}
+          VITE_WEB3FORMS_NEWSLETTER_ACCESS_KEY: ${{ vars.VITE_WEB3FORMS_NEWSLETTER_ACCESS_KEY }}
 
       - uses: actions/upload-artifact@v7
         with:

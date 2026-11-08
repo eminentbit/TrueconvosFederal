@@ -1,26 +1,31 @@
 import { useId } from "react";
 
 import { Button, FormStatus, Honeypot, Input } from "@/components/ui";
-import { formEndpoints } from "@/config/env";
-import { useFormspree } from "@/hooks/useFormspree";
+import { formAccessKeys } from "@/config/env";
+import { useWeb3Forms } from "@/hooks/useWeb3Forms";
 import { cn } from "@/lib/cn";
+import { WEB3FORMS_ENDPOINT } from "@/lib/web3forms";
 
 interface NewsletterFormProps {
-  /** Override for tests/previews; defaults to the configured Formspree form. */
-  endpoint?: string | undefined;
+  /** Web3Forms access key override (tests/previews); defaults to env config. */
+  formKey?: string | undefined;
   /** id of the visible heading that names this form. */
   labelledBy?: string;
   className?: string;
 }
 
+/**
+ * Footer mailing-list signup. Subject line and recipient are configured on
+ * the "TrueConvos Federal — Mailing list" form in the Web3Forms dashboard.
+ */
 export function NewsletterForm({
-  endpoint = formEndpoints.newsletter,
+  formKey = formAccessKeys.newsletter,
   labelledBy,
   className,
 }: NewsletterFormProps) {
   const emailId = useId();
-  const { status, message, isPending, handleSubmit } = useFormspree({
-    endpoint,
+  const { status, message, isPending, handleSubmit } = useWeb3Forms({
+    accessKey: formKey,
     messages: {
       pending: "Subscribing…",
       success: "Thanks — you're on the list.",
@@ -29,17 +34,15 @@ export function NewsletterForm({
 
   return (
     <form
-      action={endpoint}
+      action={WEB3FORMS_ENDPOINT}
       method="POST"
       aria-labelledby={labelledBy}
       onSubmit={handleSubmit}
       className={cn("flex flex-col gap-2", className)}
     >
-      <input
-        type="hidden"
-        name="_subject"
-        value="Mailing list signup — TrueConvos Federal"
-      />
+      {formKey ? (
+        <input type="hidden" name="access_key" value={formKey} />
+      ) : null}
       <Honeypot />
 
       <label htmlFor={emailId} className="text-sm font-semibold text-white">
