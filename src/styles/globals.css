@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Every value maps 1:1 to the original static page.
+ * Custom names added here (text-*, tracking-*, max-w-*) must also be
+ * registered in src/lib/cn.ts so tailwind-merge resolves conflicts correctly.
+ */
+@theme {
+  --font-sans: "Public Sans Variable", "Public Sans", system-ui, sans-serif;
+
+  /* Brand */
+  --color-brand: #0b2545;
+  --color-brand-hover: #1f4e8c;
+  --color-brand-line: #2c4a72;
+  --color-accent: #b8892b;
+  --color-accent-hover: #cc9c3d;
+
+  /* Neutrals */
+  --color-body: #3b4a5e;
+  --color-muted: #4a5568;
+  --color-surface: #f4f6f9;
+  --color-line: #e2e8f0;
+  --color-field: #94a3b8;
+
+  /* Text on brand (navy) backgrounds */
+  --color-on-brand: #dce3ec;
+  --color-on-brand-muted: #c9d3e0;
+
+  /* Feedback */
+  --color-success: #2f855a;
+  --color-danger: #b42318;
+  --color-danger-on-brand: #fca5a5;
+
+  /* Layout widths */
+  --container-page: 78rem; /* 1200px content + 2 × 24px gutters */
+  --container-headline: 56.25rem; /* 900px */
+  --container-narrow: 47.5rem; /* 760px */
+
+  /* Type scale (in addition to Tailwind's defaults) */
+  --text-label: 0.8125rem; /* 13px */
+  --text-ui: 0.9375rem; /* 15px */
+  --text-lead: 1.0625rem; /* 17px */
+  --text-card-title: 1.375rem; /* 22px */
+  --text-card-title--line-height: 1.3;
+  --text-stat: 2rem; /* 32px */
+  --text-stat--line-height: 1.2;
+  --text-section-title: 2.5rem; /* 40px */
+  --text-section-title--line-height: 1.15;
+  --text-section-title--letter-spacing: -0.01em;
+  --text-display: clamp(2.25rem, 5vw, 3.75rem); /* 36–60px */
+  --text-display--line-height: 1.08;
+  --text-display--letter-spacing: -0.02em;
+
+  --tracking-eyebrow: 0.12em;
+  --tracking-label: 0.08em;
+}
+
+@layer base {
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: var(--color-white);
+    color: var(--color-brand);
+    font-family: var(--font-sans);
+  }
+
+  a {
+    color: var(--color-brand);
+    text-decoration-line: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  a:hover {
+    color: var(--color-brand-hover);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}

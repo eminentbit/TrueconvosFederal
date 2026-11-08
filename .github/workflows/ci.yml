@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck, lint, format, test
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_FORMSPREE_CONTACT_FORM_ID: ${{ vars.VITE_FORMSPREE_CONTACT_FORM_ID }}
+          VITE_FORMSPREE_NEWSLETTER_FORM_ID: ${{ vars.VITE_FORMSPREE_NEWSLETTER_FORM_ID }}
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
