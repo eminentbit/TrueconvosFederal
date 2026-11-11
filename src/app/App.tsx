@@ -4,7 +4,6 @@ import {
   CompanyData,
   Contact,
   Hero,
-  KeyPersonnel,
   PastPerformance,
   ProofStrip,
 } from "@/sections";
@@ -20,7 +19,6 @@ export function App() {
         <ProofStrip />
         <Capabilities />
         <PastPerformance />
-        <KeyPersonnel />
         <CompanyData />
         <Contact />
       </main>

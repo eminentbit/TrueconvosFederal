@@ -7,7 +7,6 @@ export interface NavLink {
 export const primaryNav = [
   { label: "Capabilities", href: "#capabilities" },
   { label: "Past Performance", href: "#past-performance" },
-  { label: "Key Personnel", href: "#key-personnel" },
   { label: "Company Data", href: "#company-data" },
 ] as const satisfies readonly NavLink[];
 

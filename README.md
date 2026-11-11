@@ -70,7 +70,7 @@ Web3Forms dashboard**, not in code.
 │   │   ├── layout/          # SkipLink, TopBar, SiteHeader, SiteFooter
 │   │   └── ui/              # Design-system primitives (Button, Section, Field…)
 │   ├── config/              # site.ts (company facts), env.ts (typed env)
-│   ├── content/             # Typed page copy/data (capabilities, personnel…)
+│   ├── content/             # Typed page copy/data (capabilities, past performance…)
 │   ├── features/            # Self-contained features (contact, newsletter)
 │   ├── hooks/               # Reusable hooks (useWeb3Forms)
 │   ├── lib/                 # Framework-agnostic helpers (cn, Web3Forms client)
@@ -129,6 +129,4 @@ host settings:
       (Settings → Email Configuration)
 - [ ] In Web3Forms, change each form's Website URL from `localhost` to the real
       domain, and set a Redirect URL (used only by no-JS submissions)
-- [ ] Replace the `[Name]` / `[Title]` placeholders in
-      `src/content/personnel.ts`
 - [ ] Delete `legacy/` once you no longer need the original for comparison
