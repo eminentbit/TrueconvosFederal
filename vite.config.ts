@@ -12,6 +12,16 @@ const PRODUCTION_ENV_KEYS = [
   "VITE_WEB3FORMS_NEWSLETTER_ACCESS_KEY",
 ] as const;
 
+/**
+ * Public URL prefix. "/" on Vercel or a custom domain; "/<repo>/" for a GitHub
+ * Pages project site (the Pages workflow sets BASE_PATH). Applies to the client
+ * and SSR builds alike, so prerendered links match the hydrated ones.
+ */
+function resolveBase(value: string | undefined): string {
+  const path = value?.trim().replace(/^\/+|\/+$/g, "");
+  return path ? `/${path}/` : "/";
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ command, mode, isSsrBuild }) => {
   if (command === "build" && !isSsrBuild) {
@@ -27,6 +37,7 @@ export default defineConfig(({ command, mode, isSsrBuild }) => {
   }
 
   return {
+    base: resolveBase(process.env.BASE_PATH),
     plugins: [
       react(),
       babel({ presets: [reactCompilerPreset()] }),

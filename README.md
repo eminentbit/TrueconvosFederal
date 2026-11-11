@@ -118,10 +118,32 @@ host settings:
   `X-Content-Type-Options: nosniff`, `Referrer-Policy`, and a CSP that allows
   `form-action` / `connect-src` to `https://api.web3forms.com`
 
+To serve the site from a sub-path, set `BASE_PATH` at build time
+(`BASE_PATH=/TrueconvosFederal npm run build`). Without it, the site builds
+for the domain root.
+
+### Vercel
+
+Production is the `trueconvos-federal` project (team `eminentbits-projects`).
+Set both `VITE_WEB3FORMS_*` variables in the project's Production environment.
+
+### GitHub Pages
+
+`.github/workflows/deploy-pages.yml` checks, builds and deploys every push to
+`main` to <https://eminentbit.github.io/TrueconvosFederal/>. `BASE_PATH` comes
+from the Pages settings, so a custom domain added there later just works.
+One-time setup:
+
+1. Settings → Pages → Source: **GitHub Actions**
+2. Settings → Secrets and variables → Actions → **Variables**: add both
+   `VITE_WEB3FORMS_*` keys. Both workflows read them. They're public in the
+   page HTML anyway, so variables are fine; they don't need to be secrets.
+
+GitHub Pages can't set custom response headers, so the cache and security
+headers above apply only on Vercel.
+
 ## Before launch
 
-- [ ] Add `public/TrueConvos-Federal-Capability-Statement.pdf` (both download
-      links point to it)
 - [ ] Set both Web3Forms access keys in CI (repository variables) and on the
       host (`.env.local` already has them for local testing)
 - [ ] In Web3Forms, for **each** form: verify `bd@trueconvos.com` (link in that
